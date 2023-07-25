@@ -1,0 +1,5 @@
+module SpaceNetKitGo {
+    umbrella header "spacenet.h"
+    link "sn-go"
+    export *
+}
