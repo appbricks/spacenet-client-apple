@@ -3,16 +3,11 @@
  * Copyright (C) 2023 AppBricks, Inc. All Rights Reserved.
  */
 
-package main
+ package main
 
 // #include <stdlib.h>
 // #include <stdio.h>
 // #include <sys/types.h>
-//
-// static void postStatusChange(void *func, void *ctx, const unsigned char status)
-// {
-//   ((void(*)(void *, const unsigned char))func)(ctx, status);
-// }
 //
 // static void showDialog(void *func, void* ctx, const unsigned char type, const char *title, const char* msg, const char withTextInput, void* cbContext) {
 //   ((void(*)(void *, const unsigned char, const char *, const char *, const char, void *))func)(ctx, type, title, msg, withTextInput, cbContext);
@@ -33,38 +28,12 @@ import "C"
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
 	"unsafe"
-
-	homedir "github.com/mitchellh/go-homedir"
-
-	"github.com/appbricks/cloud-builder/config"
-	// "github.com/appbricks/mycloudspace-client/mycscloud"
-	// "github.com/appbricks/mycloudspace-common/monitors"
-	"github.com/mevansam/goutils/logger"
 )
 
 var (
-	homeDir string
-
-	cfgStatusHandlers = [][2]uintptr{}
-
 	showDialogFuncs [3]uintptr
-
-	passphraseInput chan *string
-
-	// Global configuration
-	snConfig config.Config
-
-	// // Monitor Service
-	// monitorService *monitors.MonitorService
-
-	// // Space Targets
-	// spaceNodes *mycscloud.SpaceNodes
 )
-
-var isProd = "no"
 
 const (
 	SN_CFG_STATUS_ERROR       = 0
@@ -128,67 +97,6 @@ func snUnregisterShowDialogFunc() {
 	showDialogFuncs = [3]uintptr{0x0, 0x0, 0x0}
 }
 
-//export snRegisterStatusChangeHandler
-func snRegisterStatusChangeHandler(context, handler uintptr) {
-	cfgStatusHandlers = append(cfgStatusHandlers, [2]uintptr{handler, context})
-}
-func postStatusChange(status C.uchar) {
-	for _, h := range cfgStatusHandlers {
-		if h[0] != 0 {
-			fn  := unsafe.Pointer(h[0])
-			ctx := unsafe.Pointer(h[1])
-			C.postStatusChange(fn, ctx, status)
-		}
-	}
-}
-
-//export snInitializeContext
-func snInitializeContext(passphrase *C.char) {	
-
-	go func() {
-
-		var (
-			err error
-		)
-
-		needsPassphrase := false
-		getPassphrase := func() string {
-			if passphrase == nil {
-				needsPassphrase = true
-				return ""
-			}
-			return C.GoString(passphrase)
-		}
-
-		// initialize / load config file
-		cfgFile := filepath.Join(homeDir, ".cb", "config.yml")
-		logger.DebugMessage("Loading config: %s", cfgFile)
-
-		if snConfig, err = config.InitFileConfig(
-			cfgFile, nil, 
-			getPassphrase, nil,
-		); err != nil {
-			logger.DebugMessage("Error initializing the config file instance: %s", err.Error())
-			showErrorAndExit(err.Error())
-		}
-		if needsPassphrase {
-			postStatusChange(SN_CFG_STATUS_LOCKED)
-
-		} else {
-			if err = snConfig.Load(); err != nil {
-				logger.DebugMessage("Error loading the configuration data: %s", err.Error())
-				showErrorAndExit(err.Error())
-			}
-
-			if snConfig.Initialized() {
-				postStatusChange(SN_CFG_STATUS_NEEDS_LOGIN)
-			} else {
-				postStatusChange(SN_CFG_STATUS_NEEDS_INIT)
-			}			
-		}		
-	}()	
-}
-
 // Begin: Swift / Golang UX Interop TESTS
 
 //export snTESTdialogInput
@@ -221,39 +129,3 @@ func snTESTHello(name *C.char) *C.char {
 }
 
 // End: Swift / Golang UX Interop TESTS
-
-func init() {
-
-	var (
-		err error
-	)
-
-	if isProd == "yes" {
-		logLevel := os.Getenv("CBS_LOGLEVEL")
-		if len(logLevel) == 0 {
-			// default is error but for prod builds we do 
-			// not want to show errors unless requested
-			os.Setenv("CBS_LOGLEVEL", "fatal")
-
-		} else if logLevel == "trace" {
-			// reset trace log level if set for prod builds
-			showWarningMessage(
-				"Trace log-level is not supported in prod build. Resetting level to 'debug'.\n",
-			)
-			os.Setenv("CBS_LOGLEVEL", "debug")
-		}
-	}
-	logger.Initialize()
-
-	// find users home directory.
-	homeDir, err = homedir.Dir()
-	if err != nil {
-		showErrorAndExit(err.Error())
-	}
-
-	// initialize data input channels
-	passphraseInput = make(chan *string)
-}
-
-func main() {
-}
