@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MIT
  *
- * Copyright (C) 2018-2023 WireGuard LLC. All Rights Reserved.
+ * Copyright (C) 2023 AppBricks, Inc. All Rights Reserved.
  */
 
 #ifndef SPACENET_API_H
@@ -13,12 +13,12 @@
 #include "./ui.h"
 
 typedef unsigned char SN_CFG_STATUS;
-const SN_CFG_STATUS SN_CFG_STATUS_ERROR = 0;
-const SN_CFG_STATUS SN_CFG_STATUS_NEEDS_INIT = 1;
-const SN_CFG_STATUS SN_CFG_STATUS_NEEDS_LOGIN = 2;
-const SN_CFG_STATUS SN_CFG_STATUS_LOGGED_IN = 3;
-const SN_CFG_STATUS SN_CFG_STATUS_LOGGED_OUT = 4;
-const SN_CFG_STATUS SN_CFG_STATUS_LOCKED = 5;
+extern const SN_CFG_STATUS SN_CFG_STATUS_ERROR;
+extern const SN_CFG_STATUS SN_CFG_STATUS_NEEDS_INIT;
+extern const SN_CFG_STATUS SN_CFG_STATUS_NEEDS_LOGIN;
+extern const SN_CFG_STATUS SN_CFG_STATUS_LOGGED_IN;
+extern const SN_CFG_STATUS SN_CFG_STATUS_LOGGED_OUT;
+extern const SN_CFG_STATUS SN_CFG_STATUS_LOCKED;
 
 typedef void (*set_cfg_status)(void *context, const SN_CFG_STATUS status);
 extern void snRegisterStatusChangeHandler(void *context, set_cfg_status handler);

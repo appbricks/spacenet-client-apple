@@ -15,9 +15,10 @@ class StatusItemController {
     private let statusBarImageWhenInactive = NSImage(named: "StatusBarIconDimmed")!
 
     private let animationImages = [
-        NSImage(named: "StatusBarIconDot1")!,
-        NSImage(named: "StatusBarIconDot2")!,
-        NSImage(named: "StatusBarIconDot3")!
+        NSImage(named: "StatusBarLoading1")!,
+        NSImage(named: "StatusBarLoading2")!,
+        NSImage(named: "StatusBarLoading3")!,
+        NSImage(named: "StatusBarLoading4")!
     ]
     private var animationImageIndex: Int = 0
     private var animationTimer: Timer?

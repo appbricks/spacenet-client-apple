@@ -9,6 +9,14 @@ package main
 // #include <stdio.h>
 // #include <sys/types.h>
 //
+// typedef unsigned char SN_CFG_STATUS;
+// const SN_CFG_STATUS SN_CFG_STATUS_ERROR = 0;
+// const SN_CFG_STATUS SN_CFG_STATUS_NEEDS_INIT = 1;
+// const SN_CFG_STATUS SN_CFG_STATUS_NEEDS_LOGIN = 2;
+// const SN_CFG_STATUS SN_CFG_STATUS_LOGGED_IN = 3;
+// const SN_CFG_STATUS SN_CFG_STATUS_LOGGED_OUT = 4;
+// const SN_CFG_STATUS SN_CFG_STATUS_LOCKED = 5;
+//
 // static void postStatusChange(void *func, void *ctx, const unsigned char status)
 // {
 //   ((void(*)(void *, const unsigned char))func)(ctx, status);

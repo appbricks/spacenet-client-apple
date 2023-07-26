@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		087C00EE2A68846700DB490C /* libsn-go.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 087C00ED2A68846700DB490C /* libsn-go.a */; };
 		087C00F02A68CCAD00DB490C /* libsn-go.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 087C00EF2A68CCAD00DB490C /* libsn-go.a */; };
-		087C00F32A6AEFEB00DB490C /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087C00F22A6AEFEB00DB490C /* Utility.swift */; };
 		087C00F42A6AEFEB00DB490C /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087C00F22A6AEFEB00DB490C /* Utility.swift */; };
 		08BC24C62A6215850096C6A0 /* SpaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BC24C52A6215850096C6A0 /* SpaceManager.swift */; };
 		08BC24C92A6324460096C6A0 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BC24C72A62E1E20096C6A0 /* SettingsViewController.swift */; };
@@ -321,6 +320,7 @@
 		08D8B5D32A6C8F7E0093A4F4 /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
 		08D8B5D52A6CD5F10093A4F4 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
 		08D8B5D72A6CD6060093A4F4 /* libresolv.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.9.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/libresolv.9.tbd; sourceTree = DEVELOPER_DIR; };
+		08D8B5F62A7065610093A4F4 /* SpaceNetKitGo */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SpaceNetKitGo; path = Sources/SpaceNetKitGo; sourceTree = "<group>"; };
 		58233BCE2591F842002060A8 /* NotificationToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationToken.swift; sourceTree = "<group>"; };
 		585B10462577E293004F691E /* InterfaceConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceConfiguration.swift; sourceTree = "<group>"; };
 		585B10472577E293004F691E /* PeerConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerConfiguration.swift; sourceTree = "<group>"; };
@@ -683,7 +683,6 @@
 				6F29A94622787B1600DC6A6B /* QuickActionItem.swift */,
 				6FF4AC23211EC472002C96EB /* Info.plist */,
 				6FF4AC482120B9E0002C96EB /* WireGuard.entitlements */,
-				087C00F22A6AEFEB00DB490C /* Utility.swift */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -733,6 +732,7 @@
 		6FB1BD5E21D2607A00A991BF /* macOS */ = {
 			isa = PBXGroup;
 			children = (
+				6FB1BD6121D2607E00A991BF /* Assets.xcassets */,
 				6F70E22A22106A2D008BDFB4 /* LoginItemHelper */,
 				6F4DD16921DA556600690EAE /* View */,
 				6FBA104421D7EA750051C35F /* ViewController */,
@@ -746,13 +746,13 @@
 				6FCD99AE21E0EA1700BA4C82 /* ImportPanelPresenter.swift */,
 				6F2449E7226587B80047B9E9 /* MacAppStoreUpdateDetector.swift */,
 				6F6483E6229293300075BA15 /* LaunchedAtLoginDetector.swift */,
-				6FB1BD6121D2607E00A991BF /* Assets.xcassets */,
-				6FB1BD6621D2607E00A991BF /* Info.plist */,
-				6FB1BD6721D2607E00A991BF /* WireGuard.entitlements */,
 				6F4DD16721DA552B00690EAE /* NSTableView+Reuse.swift */,
 				5F52D0BE21E3788900283CEA /* NSColor+Hex.swift */,
 				6FFACD1E21E4D89600E9A2A5 /* ParseError+WireGuardAppError.swift */,
 				08D8B5D12A6C49DF0093A4F4 /* SpaceNetContextMenu.swift */,
+				087C00F22A6AEFEB00DB490C /* Utility.swift */,
+				6FB1BD6621D2607E00A991BF /* Info.plist */,
+				6FB1BD6721D2607E00A991BF /* WireGuard.entitlements */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -817,13 +817,14 @@
 		6FF4AC0B211EC46F002C96EB = {
 			isa = PBXGroup;
 			children = (
-				087C00F12A6AE70800DB490C /* WireGuardKitGo */,
 				6F70E20C221058DF008BDFB4 /* InfoPlist.strings */,
 				6FE1765421C90BBE002690EA /* Localizable.strings */,
 				6F5D0C432183B4A4000F85AD /* Shared */,
 				6FF4AC16211EC46F002C96EB /* SpaceNetClient */,
+				08D8B5F62A7065610093A4F4 /* SpaceNetKitGo */,
 				6F5D0C1B218352EF000F85AD /* WireGuardNetworkExtension */,
 				585B10452577E293004F691E /* WireGuardKit */,
+				087C00F12A6AE70800DB490C /* WireGuardKitGo */,
 				585B10532577E293004F691E /* WireGuardKitC */,
 				6FF4AC15211EC46F002C96EB /* Products */,
 				6FF4AC452120B9E0002C96EB /* Frameworks */,
@@ -877,68 +878,68 @@
 /* End PBXGroup section */
 
 /* Begin PBXLegacyTarget section */
-		087C00D92A68775C00DB490C /* SpaceNetGoBridgemacOS */ = {
+		087C00D92A68775C00DB490C /* SpaceNetGoBridge-macOS */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 087C00DA2A68775C00DB490C /* Build configuration list for PBXLegacyTarget "SpaceNetGoBridgemacOS" */;
+			buildConfigurationList = 087C00DA2A68775C00DB490C /* Build configuration list for PBXLegacyTarget "SpaceNetGoBridge-macOS" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
 			buildWorkingDirectory = "$(PROJECT_DIR)/Sources/SpaceNetKitGo";
 			dependencies = (
 			);
-			name = SpaceNetGoBridgemacOS;
+			name = "SpaceNetGoBridge-macOS";
 			passBuildSettingsInEnvironment = 1;
 			productName = WireGuardGoBridge;
 		};
-		087C00DD2A68777F00DB490C /* SpaceNetGoBridgeiOS */ = {
+		087C00DD2A68777F00DB490C /* SpaceNetGoBridge-iOS */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 087C00DE2A68777F00DB490C /* Build configuration list for PBXLegacyTarget "SpaceNetGoBridgeiOS" */;
+			buildConfigurationList = 087C00DE2A68777F00DB490C /* Build configuration list for PBXLegacyTarget "SpaceNetGoBridge-iOS" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
 			buildWorkingDirectory = "$(PROJECT_DIR)/Sources/SpaceNetKitGo";
 			dependencies = (
 			);
-			name = SpaceNetGoBridgeiOS;
+			name = "SpaceNetGoBridge-iOS";
 			passBuildSettingsInEnvironment = 1;
 			productName = WireGuardGoBridge;
 		};
-		6FDAA03421CE69D000FA6925 /* WireGuardGoBridgemacOS */ = {
+		6FDAA03421CE69D000FA6925 /* WireGuardGoBridge-macOS */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 6FDAA03521CE69D000FA6925 /* Build configuration list for PBXLegacyTarget "WireGuardGoBridgemacOS" */;
+			buildConfigurationList = 6FDAA03521CE69D000FA6925 /* Build configuration list for PBXLegacyTarget "WireGuardGoBridge-macOS" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
 			buildWorkingDirectory = "$(PROJECT_DIR)/Sources/WireGuardKitGo";
 			dependencies = (
 			);
-			name = WireGuardGoBridgemacOS;
+			name = "WireGuardGoBridge-macOS";
 			passBuildSettingsInEnvironment = 1;
 			productName = WireGuardGoBridge;
 		};
-		6FDEF7DD21846BC100D8FBF6 /* WireGuardGoBridgeiOS */ = {
+		6FDEF7DD21846BC100D8FBF6 /* WireGuardGoBridge-iOS */ = {
 			isa = PBXLegacyTarget;
 			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 6FDEF7E021846BC700D8FBF6 /* Build configuration list for PBXLegacyTarget "WireGuardGoBridgeiOS" */;
+			buildConfigurationList = 6FDEF7E021846BC700D8FBF6 /* Build configuration list for PBXLegacyTarget "WireGuardGoBridge-iOS" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
 			buildWorkingDirectory = "$(PROJECT_DIR)/Sources/WireGuardKitGo";
 			dependencies = (
 			);
-			name = WireGuardGoBridgeiOS;
+			name = "WireGuardGoBridge-iOS";
 			passBuildSettingsInEnvironment = 1;
 			productName = WireGuardGoBridge;
 		};
 /* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
-		6F5D0C19218352EF000F85AD /* WireGuardNetworkExtensioniOS */ = {
+		6F5D0C19218352EF000F85AD /* WireGuardNetworkExtension-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6F5D0C25218352EF000F85AD /* Build configuration list for PBXNativeTarget "WireGuardNetworkExtensioniOS" */;
+			buildConfigurationList = 6F5D0C25218352EF000F85AD /* Build configuration list for PBXNativeTarget "WireGuardNetworkExtension-iOS" */;
 			buildPhases = (
 				5F45417B21C0906F00994C13 /* Swiftlint */,
 				6F5D0C16218352EF000F85AD /* Sources */,
@@ -950,7 +951,7 @@
 			dependencies = (
 				6FDEF7E221846C0000D8FBF6 /* PBXTargetDependency */,
 			);
-			name = WireGuardNetworkExtensioniOS;
+			name = "WireGuardNetworkExtension-iOS";
 			packageProductDependencies = (
 			);
 			productName = WireGuardNetworkExtension;
@@ -972,9 +973,9 @@
 			productReference = 6F70E22922106A2D008BDFB4 /* WireGuardLoginItemHelper.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6FB1BD5C21D2607A00A991BF /* WireGuardmacOS */ = {
+		6FB1BD5C21D2607A00A991BF /* SpaceNetClient-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6FB1BD6A21D2607E00A991BF /* Build configuration list for PBXNativeTarget "WireGuardmacOS" */;
+			buildConfigurationList = 6FB1BD6A21D2607E00A991BF /* Build configuration list for PBXNativeTarget "SpaceNetClient-macOS" */;
 			buildPhases = (
 				6FB1BDB821D4FA9100A991BF /* Strip Trailing Whitespace */,
 				6FB1BDB921D4FAD000A991BF /* Swiftlint */,
@@ -993,16 +994,16 @@
 				6F70E23B22109DD3008BDFB4 /* PBXTargetDependency */,
 				6FB1BD9821D4BFE700A991BF /* PBXTargetDependency */,
 			);
-			name = WireGuardmacOS;
+			name = "SpaceNetClient-macOS";
 			packageProductDependencies = (
 			);
 			productName = WireGuardmacOS;
 			productReference = 6FB1BD5D21D2607A00A991BF /* SpaceNetClient.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6FB1BD9021D4BFE600A991BF /* WireGuardNetworkExtensionmacOS */ = {
+		6FB1BD9021D4BFE600A991BF /* WireGuardNetworkExtension-macOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6FB1BD9C21D4BFE700A991BF /* Build configuration list for PBXNativeTarget "WireGuardNetworkExtensionmacOS" */;
+			buildConfigurationList = 6FB1BD9C21D4BFE700A991BF /* Build configuration list for PBXNativeTarget "WireGuardNetworkExtension-macOS" */;
 			buildPhases = (
 				6FB1BDB421D4F5CF00A991BF /* Swiftlint */,
 				6FB1BD8D21D4BFE600A991BF /* Sources */,
@@ -1014,16 +1015,16 @@
 			dependencies = (
 				6FB1BD9F21D4DF7A00A991BF /* PBXTargetDependency */,
 			);
-			name = WireGuardNetworkExtensionmacOS;
+			name = "WireGuardNetworkExtension-macOS";
 			packageProductDependencies = (
 			);
 			productName = WireGuardNetworkExtension;
 			productReference = 6FB1BD9121D4BFE600A991BF /* WireGuardNetworkExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		6FF4AC13211EC46F002C96EB /* WireGuardiOS */ = {
+		6FF4AC13211EC46F002C96EB /* SpaceNetClient-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6FF4AC26211EC472002C96EB /* Build configuration list for PBXNativeTarget "WireGuardiOS" */;
+			buildConfigurationList = 6FF4AC26211EC472002C96EB /* Build configuration list for PBXNativeTarget "SpaceNetClient-iOS" */;
 			buildPhases = (
 				5F784E5721CDF6DD00B8D9A0 /* Strip Trailing Whitespace */,
 				5F45417A21C0902400994C13 /* Swiftlint */,
@@ -1040,7 +1041,7 @@
 				087C00EC2A68845500DB490C /* PBXTargetDependency */,
 				6F5D0C21218352EF000F85AD /* PBXTargetDependency */,
 			);
-			name = WireGuardiOS;
+			name = "SpaceNetClient-iOS";
 			packageProductDependencies = (
 			);
 			productName = SpaceNetClient;
@@ -1146,14 +1147,14 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6FF4AC13211EC46F002C96EB /* WireGuardiOS */,
-				6F5D0C19218352EF000F85AD /* WireGuardNetworkExtensioniOS */,
-				6FDEF7DD21846BC100D8FBF6 /* WireGuardGoBridgeiOS */,
-				087C00DD2A68777F00DB490C /* SpaceNetGoBridgeiOS */,
-				6FB1BD5C21D2607A00A991BF /* WireGuardmacOS */,
-				6FB1BD9021D4BFE600A991BF /* WireGuardNetworkExtensionmacOS */,
-				6FDAA03421CE69D000FA6925 /* WireGuardGoBridgemacOS */,
-				087C00D92A68775C00DB490C /* SpaceNetGoBridgemacOS */,
+				6FB1BD5C21D2607A00A991BF /* SpaceNetClient-macOS */,
+				087C00D92A68775C00DB490C /* SpaceNetGoBridge-macOS */,
+				6FDAA03421CE69D000FA6925 /* WireGuardGoBridge-macOS */,
+				6FB1BD9021D4BFE600A991BF /* WireGuardNetworkExtension-macOS */,
+				6FF4AC13211EC46F002C96EB /* SpaceNetClient-iOS */,
+				087C00DD2A68777F00DB490C /* SpaceNetGoBridge-iOS */,
+				6FDEF7DD21846BC100D8FBF6 /* WireGuardGoBridge-iOS */,
+				6F5D0C19218352EF000F85AD /* WireGuardNetworkExtension-iOS */,
 				6F70E22822106A2D008BDFB4 /* WireGuardmacOSLoginItemHelper */,
 			);
 		};
@@ -1569,7 +1570,6 @@
 				6B5C5E27220A48D30024272E /* Keychain.swift in Sources */,
 				6F628C3D217F09E9003482A3 /* TunnelViewModel.swift in Sources */,
 				5F4541A621C4449E00994C13 /* ButtonCell.swift in Sources */,
-				087C00F32A6AEFEB00DB490C /* Utility.swift in Sources */,
 				5F45419821C2D60500994C13 /* KeyValueCell.swift in Sources */,
 				6FBA103E21D6B6D70051C35F /* TunnelImporter.swift in Sources */,
 				6F9B8A8E223398610041B9C4 /* SSIDOptionDetailTableViewController.swift in Sources */,
@@ -1612,17 +1612,17 @@
 /* Begin PBXTargetDependency section */
 		087C00E42A687D9300DB490C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 087C00D92A68775C00DB490C /* SpaceNetGoBridgemacOS */;
+			target = 087C00D92A68775C00DB490C /* SpaceNetGoBridge-macOS */;
 			targetProxy = 087C00E32A687D9300DB490C /* PBXContainerItemProxy */;
 		};
 		087C00EC2A68845500DB490C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 087C00DD2A68777F00DB490C /* SpaceNetGoBridgeiOS */;
+			target = 087C00DD2A68777F00DB490C /* SpaceNetGoBridge-iOS */;
 			targetProxy = 087C00EB2A68845500DB490C /* PBXContainerItemProxy */;
 		};
 		6F5D0C21218352EF000F85AD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6F5D0C19218352EF000F85AD /* WireGuardNetworkExtensioniOS */;
+			target = 6F5D0C19218352EF000F85AD /* WireGuardNetworkExtension-iOS */;
 			targetProxy = 6F5D0C20218352EF000F85AD /* PBXContainerItemProxy */;
 		};
 		6F70E23B22109DD3008BDFB4 /* PBXTargetDependency */ = {
@@ -1632,17 +1632,17 @@
 		};
 		6FB1BD9821D4BFE700A991BF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6FB1BD9021D4BFE600A991BF /* WireGuardNetworkExtensionmacOS */;
+			target = 6FB1BD9021D4BFE600A991BF /* WireGuardNetworkExtension-macOS */;
 			targetProxy = 6FB1BD9721D4BFE700A991BF /* PBXContainerItemProxy */;
 		};
 		6FB1BD9F21D4DF7A00A991BF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6FDAA03421CE69D000FA6925 /* WireGuardGoBridgemacOS */;
+			target = 6FDAA03421CE69D000FA6925 /* WireGuardGoBridge-macOS */;
 			targetProxy = 6FB1BD9E21D4DF7A00A991BF /* PBXContainerItemProxy */;
 		};
 		6FDEF7E221846C0000D8FBF6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6FDEF7DD21846BC100D8FBF6 /* WireGuardGoBridgeiOS */;
+			target = 6FDEF7DD21846BC100D8FBF6 /* WireGuardGoBridge-iOS */;
 			targetProxy = 6FDEF7E121846C0000D8FBF6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -2108,7 +2108,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		087C00DA2A68775C00DB490C /* Build configuration list for PBXLegacyTarget "SpaceNetGoBridgemacOS" */ = {
+		087C00DA2A68775C00DB490C /* Build configuration list for PBXLegacyTarget "SpaceNetGoBridge-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				087C00DB2A68775C00DB490C /* Debug */,
@@ -2117,7 +2117,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		087C00DE2A68777F00DB490C /* Build configuration list for PBXLegacyTarget "SpaceNetGoBridgeiOS" */ = {
+		087C00DE2A68777F00DB490C /* Build configuration list for PBXLegacyTarget "SpaceNetGoBridge-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				087C00DF2A68777F00DB490C /* Debug */,
@@ -2126,7 +2126,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6F5D0C25218352EF000F85AD /* Build configuration list for PBXNativeTarget "WireGuardNetworkExtensioniOS" */ = {
+		6F5D0C25218352EF000F85AD /* Build configuration list for PBXNativeTarget "WireGuardNetworkExtension-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6F5D0C23218352EF000F85AD /* Debug */,
@@ -2144,7 +2144,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6FB1BD6A21D2607E00A991BF /* Build configuration list for PBXNativeTarget "WireGuardmacOS" */ = {
+		6FB1BD6A21D2607E00A991BF /* Build configuration list for PBXNativeTarget "SpaceNetClient-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6FB1BD6821D2607E00A991BF /* Debug */,
@@ -2153,7 +2153,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6FB1BD9C21D4BFE700A991BF /* Build configuration list for PBXNativeTarget "WireGuardNetworkExtensionmacOS" */ = {
+		6FB1BD9C21D4BFE700A991BF /* Build configuration list for PBXNativeTarget "WireGuardNetworkExtension-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6FB1BD9A21D4BFE700A991BF /* Debug */,
@@ -2162,7 +2162,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6FDAA03521CE69D000FA6925 /* Build configuration list for PBXLegacyTarget "WireGuardGoBridgemacOS" */ = {
+		6FDAA03521CE69D000FA6925 /* Build configuration list for PBXLegacyTarget "WireGuardGoBridge-macOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6FDAA03621CE69D000FA6925 /* Debug */,
@@ -2171,7 +2171,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6FDEF7E021846BC700D8FBF6 /* Build configuration list for PBXLegacyTarget "WireGuardGoBridgeiOS" */ = {
+		6FDEF7E021846BC700D8FBF6 /* Build configuration list for PBXLegacyTarget "WireGuardGoBridge-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6FDEF7DE21846BC100D8FBF6 /* Debug */,
@@ -2189,7 +2189,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6FF4AC26211EC472002C96EB /* Build configuration list for PBXNativeTarget "WireGuardiOS" */ = {
+		6FF4AC26211EC472002C96EB /* Build configuration list for PBXNativeTarget "SpaceNetClient-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6FF4AC27211EC472002C96EB /* Debug */,

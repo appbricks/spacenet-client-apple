@@ -1,0 +1,164 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXFileReference section */
+		08D8B5E52A7065610093A4F4 /* go.mod */ = {isa = PBXFileReference; lastKnownFileType = text; path = go.mod; sourceTree = "<group>"; };
+		08D8B5E62A7065610093A4F4 /* ui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ui.h; sourceTree = "<group>"; };
+		08D8B5E72A7065610093A4F4 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		08D8B5E82A7065610093A4F4 /* goruntime-boottime-over-monotonic.diff */ = {isa = PBXFileReference; lastKnownFileType = text; path = "goruntime-boottime-over-monotonic.diff"; sourceTree = "<group>"; };
+		08D8B5E92A7065610093A4F4 /* utility.go */ = {isa = PBXFileReference; lastKnownFileType = text; path = utility.go; sourceTree = "<group>"; };
+		08D8B5EA2A7065610093A4F4 /* go.sum */ = {isa = PBXFileReference; lastKnownFileType = text; path = go.sum; sourceTree = "<group>"; };
+		08D8B5EB2A7065610093A4F4 /* dummy.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = dummy.c; sourceTree = "<group>"; };
+		08D8B5EC2A7065610093A4F4 /* ui.go */ = {isa = PBXFileReference; lastKnownFileType = text; path = ui.go; sourceTree = "<group>"; };
+		08D8B5ED2A7065610093A4F4 /* api.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = api.h; sourceTree = "<group>"; };
+		08D8B5EE2A7065610093A4F4 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		08D8B5EF2A7065610093A4F4 /* api.go */ = {isa = PBXFileReference; lastKnownFileType = text; path = api.go; sourceTree = "<group>"; };
+		08D8B5F02A7065610093A4F4 /* spacenet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = spacenet.h; sourceTree = "<group>"; };
+		08D8B5F12A7065610093A4F4 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		08D8B5F22A7065610093A4F4 /* main.go */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.go; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		08D8B5DF2A7065610093A4F4 = {
+			isa = PBXGroup;
+			children = (
+				08D8B5E52A7065610093A4F4 /* go.mod */,
+				08D8B5E62A7065610093A4F4 /* ui.h */,
+				08D8B5E72A7065610093A4F4 /* Makefile */,
+				08D8B5E82A7065610093A4F4 /* goruntime-boottime-over-monotonic.diff */,
+				08D8B5E92A7065610093A4F4 /* utility.go */,
+				08D8B5EA2A7065610093A4F4 /* go.sum */,
+				08D8B5EB2A7065610093A4F4 /* dummy.c */,
+				08D8B5EC2A7065610093A4F4 /* ui.go */,
+				08D8B5ED2A7065610093A4F4 /* api.h */,
+				08D8B5EE2A7065610093A4F4 /* .gitignore */,
+				08D8B5EF2A7065610093A4F4 /* api.go */,
+				08D8B5F02A7065610093A4F4 /* spacenet.h */,
+				08D8B5F12A7065610093A4F4 /* module.modulemap */,
+				08D8B5F22A7065610093A4F4 /* main.go */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		08D8B5E42A7065610093A4F4 /* SpaceNetKitGo */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 08D8B5F32A7065610093A4F4 /* Build configuration list for PBXLegacyTarget "SpaceNetKitGo" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "/Users/mevan/Work/appbricks/cloud/spacenet-client-apple/SpaceNetClient/Sources/SpaceNetKitGo";
+			dependencies = (
+			);
+			name = SpaceNetKitGo;
+			passBuildSettingsInEnvironment = 1;
+			productName = SpaceNetKitGo;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		08D8B5E02A7065610093A4F4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+			};
+			buildConfigurationList = 08D8B5E32A7065610093A4F4 /* Build configuration list for PBXProject "SpaceNetKitGo" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 08D8B5DF2A7065610093A4F4;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				08D8B5E42A7065610093A4F4 /* SpaceNetKitGo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		08D8B5E12A7065610093A4F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		08D8B5E22A7065610093A4F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+		08D8B5F42A7065610093A4F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = SpaceNetKitGo;
+			};
+			name = Debug;
+		};
+		08D8B5F52A7065610093A4F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = SpaceNetKitGo;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		08D8B5E32A7065610093A4F4 /* Build configuration list for PBXProject "SpaceNetKitGo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08D8B5E12A7065610093A4F4 /* Debug */,
+				08D8B5E22A7065610093A4F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		08D8B5F32A7065610093A4F4 /* Build configuration list for PBXLegacyTarget "SpaceNetKitGo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08D8B5F42A7065610093A4F4 /* Debug */,
+				08D8B5F52A7065610093A4F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08D8B5E02A7065610093A4F4 /* Project object */;
+}

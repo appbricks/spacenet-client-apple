@@ -73,12 +73,28 @@ class SettingsViewController: NSViewController {
         return button
     }()
 
+    let testNotifyButton: NSButton = {
+        let button = NSButton()
+        button.title = "Test Notify"
+        button.setButtonType(.momentaryPushIn)
+        button.bezelStyle = .rounded
+        return button
+    }()
+
     init() {
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewWillAppear() {
+        setDialogHandlers(target: self)
+    }
+
+    override func viewDidDisappear() {
+        resetDialogHandlers(target: self)
     }
 
     override func loadView() {
@@ -89,9 +105,6 @@ class SettingsViewController: NSViewController {
 
         discardButton.target = self
         discardButton.action = #selector(handleDiscardAction)
-
-        testInputButton.target = self
-        testInputButton.action = #selector(handleTestInputAction)
 
         loginDeviceUserButton.onButtonClicked = handleLoginDeviceUser
         openDeviceUserKeyFileButtons.onButtonClicked = handleOpenDeviceUserKeyFile
@@ -105,7 +118,7 @@ class SettingsViewController: NSViewController {
         editorStackView.spacing = internalSpacing
 
         let buttonRowStackView = NSStackView()
-        buttonRowStackView.setViews([discardButton, saveButton, testInputButton], in: .trailing)
+        buttonRowStackView.setViews([discardButton, saveButton], in: .trailing)
         buttonRowStackView.orientation = .horizontal
         buttonRowStackView.spacing = internalSpacing
 
@@ -122,38 +135,21 @@ class SettingsViewController: NSViewController {
         containerView.frame = NSRect(x: 0, y: 0, width: 600, height: 480)
 
         self.view = containerView
+
+        // **** UI TESTS
+        testInputButton.target = self
+        testInputButton.action = #selector(handleTestInputAction)
+        testNotifyButton.target = self
+        testNotifyButton.action = #selector(handleTestNotifyAction)
+        buttonRowStackView.addView(testInputButton, in: .trailing)
+        buttonRowStackView.addView(testNotifyButton, in: .trailing)
+        // ****
     }
 
     func populateFields() {
-
     }
 
     func handleLoginDeviceUser(_: Int) {
-//        guard let window = self.view.window else { return }
-//        let alertDialog = NSAlert()
-//        alertDialog.addButton(withTitle: "OK")
-//        alertDialog.addButton(withTitle: "Cancel")
-//        alertDialog.messageText = "a title"
-//        alertDialog.informativeText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-//        alertDialog.addButton(withTitle: "Cancel")
-
-//        let txt = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
-//        txt.stringValue = defaultValue
-//        alertDialog.accessoryView = txt
-
-//        Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { timer in
-//            print("Timer fired!")
-//            window.endSheet(alertDialog.window)
-//            alertDialog.window.close()
-//        }
-//
-//        alertDialog.beginSheetModal(for: window) { modalResponse in
-//            if modalResponse == .alertFirstButtonReturn {
-//                print("button clicked")
-//            } else {
-//                print("window closed")
-//            }
-//        }
     }
 
     func handleOpenDeviceUserKeyFile(i: Int) {
@@ -189,9 +185,10 @@ class SettingsViewController: NSViewController {
         self.presentingViewController?.dismiss(self)
     }
 
+    // **** UI TESTS
     @objc func handleTestInputAction() {
         let context = Unmanaged.passUnretained(self).toOpaque()
-        snTESTdialogInput(context) { context, _, title, msg, inputContext, inputHandler in
+        snTESTdialogInput(context) { context, dialogType, title, msg, inputContext, inputHandler in
             guard
                 let context = context,
                 let title = title,
@@ -205,10 +202,14 @@ class SettingsViewController: NSViewController {
                 let inTitle = String(cString: title)
                 let inMsg = String(cString: msg)
 
-                getInput(window: window, title: inTitle, msg: inMsg, defaultValue: "") { (ok: Bool, result: String) in
+                _ = showSimpleDialog(window: window, dialogType: dialogType, title: inTitle, msg: inMsg, withTextInput: true) { ok, result in
                     inputHandler(inputContext, ok ? 1 : 0, (result as NSString).utf8String)
                 }
             }
         }
     }
+    @objc func handleTestNotifyAction() {
+        snTESTdialogNotifyAndInput(Unmanaged.passUnretained(self).toOpaque())
+    }
+    // ****
 }
