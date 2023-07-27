@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "mycs-logo-1x-loading-2.png",
+      "filename" : "mycs-logo-bw-1x-loading-2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "mycs-logo-2x-loading-2.png",
+      "filename" : "mycs-logo-bw-2x-loading-2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "mycs-logo-3x-loading-2.png",
+      "filename" : "mycs-logo-bw-3x-loading-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

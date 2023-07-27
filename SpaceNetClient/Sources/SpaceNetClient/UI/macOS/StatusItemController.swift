@@ -18,7 +18,8 @@ class StatusItemController {
         NSImage(named: "StatusBarLoading1")!,
         NSImage(named: "StatusBarLoading2")!,
         NSImage(named: "StatusBarLoading3")!,
-        NSImage(named: "StatusBarLoading4")!
+        NSImage(named: "StatusBarLoading4")!,
+        NSImage(named: "StatusBarLoading5")!
     ]
     private var animationImageIndex: Int = 0
     private var animationTimer: Timer?
