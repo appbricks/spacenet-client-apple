@@ -226,7 +226,7 @@ extension AppDelegate: StatusMenuWindowDelegate {
         if manageTunnelsWindowObject == nil {
             manageTunnelsRootVC = ManageTunnelsRootViewController(tunnelsManager: tunnelsManager)
             let window = NSWindow(contentViewController: manageTunnelsRootVC!)
-            window.title = tr("macWindowTitleManageTunnels")
+            window.title = tr("macWindowTitleSpaceeNetwork")
             window.setContentSize(NSSize(width: 800, height: 480))
             window.setFrameAutosaveName(NSWindow.FrameAutosaveName("ManageTunnelsWindow")) // Auto-save window position and size
             manageTunnelsWindowObject = window

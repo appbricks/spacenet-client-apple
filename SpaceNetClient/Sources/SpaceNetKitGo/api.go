@@ -21,13 +21,21 @@ package main
 // {
 //   ((void(*)(void *, const unsigned char))func)(ctx, status);
 // }
+// static void onLoggedIn(void *func, void *ctx, const char *username)
+// {
+//	 ((void(*)(void *, const char *))func)(ctx, username);
+// }
 import "C"
 
 import (
+	"context"
 	"path/filepath"
 	"unsafe"
 
 	"github.com/appbricks/cloud-builder/config"
+	"github.com/appbricks/mycloudspace-client/api"
+	"github.com/appbricks/mycloudspace-client/auth"
+
 	// "github.com/appbricks/mycloudspace-client/mycscloud"
 	// "github.com/appbricks/mycloudspace-common/monitors"
 	"github.com/mevansam/goutils/logger"
@@ -37,7 +45,10 @@ var (
 	cfgStatusHandlers = [][2]uintptr{}
 
 	// Global configuration
-	snConfig config.Config
+	appConfig config.Config
+
+	// Authenticated user
+	authContext	config.AuthContext
 
 	// // Monitor Service
 	// monitorService *monitors.MonitorService
@@ -82,7 +93,7 @@ func snInitializeContext(passphrase *C.char) {
 		cfgFile := filepath.Join(homeDir, ".cb", "config.yml")
 		logger.DebugMessage("Loading config: %s", cfgFile)
 
-		if snConfig, err = config.InitFileConfig(
+		if appConfig, err = config.InitFileConfig(
 			cfgFile, nil, 
 			getPassphrase, nil,
 		); err != nil {
@@ -93,16 +104,80 @@ func snInitializeContext(passphrase *C.char) {
 			postStatusChange(SN_CFG_STATUS_LOCKED)
 
 		} else {
-			if err = snConfig.Load(); err != nil {
+			if err = appConfig.Load(); err != nil {
 				logger.DebugMessage("Error loading the configuration data: %s", err.Error())
 				showErrorAndExit(err.Error())
 			}
 
-			if snConfig.Initialized() {
+			if appConfig.Initialized() {
 				postStatusChange(SN_CFG_STATUS_NEEDS_LOGIN)
 			} else {
 				postStatusChange(SN_CFG_STATUS_NEEDS_INIT)
 			}			
 		}		
 	}()	
+}
+
+//export snEULAAccepted
+func snEULAAccepted() C.uchar {	
+	if appConfig != nil && appConfig.Initialized() && appConfig.EULAAccepted() {
+		return C.uchar(1)
+	}
+	return C.uchar(0)
+}
+
+//export snSetEULAAccepted
+func snSetEULAAccepted() {
+	appConfig.SetEULAAccepted()
+}
+
+//export snAuthenticate
+func snAuthenticate(dlgContext, handler uintptr) {	
+
+	var (
+		err error
+
+		awsAuth *auth.AWSCognitoJWT
+	)
+
+	serviceConfig := getServiceConfig()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	appUI := NewAppUI(cancel, dlgContext)
+	authContext := config.NewAuthContext()
+	authRet := auth.Authenticate(ctx, serviceConfig, authContext, appUI)
+
+	go func() {
+		if err := (<-authRet).Error; err != nil {				
+			logger.ErrorMessage("Authentication failed: %s", err.Error())	
+			return
+		}
+		if awsAuth, err = auth.NewAWSCognitoJWT(serviceConfig, authContext); err != nil {
+			logger.ErrorMessage("Failed to extract auth token: %s", err.Error())	
+			return
+		}
+
+		dlgContext := unsafe.Pointer(dlgContext)
+		handlerFunc := unsafe.Pointer(handler)
+		if uintptr(handlerFunc) != 0 {
+			C.onLoggedIn(handlerFunc, dlgContext, C.CString(awsAuth.Username()))
+		}
+	}()
+}
+
+func getServiceConfig() api.ServiceConfig {
+	return api.ServiceConfig{			
+		// AWS Region
+		Region: AWS_COGNITO_REGION,
+		// Cognito user pool ID
+		UserPoolID: AWS_COGNITO_USER_POOL_ID,
+		// User pool resource app 
+		// client ID and secret
+		CliendID: CLIENT_ID,
+		ClientSecret: CLIENT_SECRET,
+		// Endpoint URLs
+		AuthURL: AUTH_URL,
+		TokenURL: TOKEN_URL,
+		ApiURL: AWS_USERSPACE_API_URL,
+	}
 }

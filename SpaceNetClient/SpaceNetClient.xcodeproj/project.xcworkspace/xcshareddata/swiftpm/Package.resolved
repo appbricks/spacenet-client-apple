@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "down",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/johnxnguyen/Down",
+      "state" : {
+        "revision" : "f34b166be1f1db4aa8f573067e901d72f2a6be57",
+        "version" : "0.11.0"
+      }
+    },
+    {
+      "identity" : "dsfsecuretextfield",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dagronf/DSFSecureTextField",
+      "state" : {
+        "revision" : "95f00cd25451a37bfc4e91e28d30fa2371d89f31",
+        "version" : "2.0.0"
+      }
+    }
+  ],
+  "version" : 2
+}

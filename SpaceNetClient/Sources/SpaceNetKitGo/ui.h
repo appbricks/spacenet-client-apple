@@ -18,12 +18,23 @@ extern const SN_DIALOG_TYPE SN_DIALOG_ERROR;
 extern const SN_DIALOG_TYPE SN_DIALOG_WAIT_MSG;
 extern const SN_DIALOG_TYPE SN_DIALOG_WAIT_LOGIN;
 
+typedef unsigned char SN_DIALOG_ACCESSORY_TYPE;
+extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_NONE;
+extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_YES_NO;
+extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_OK_CANCEL;
+extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_TEXT_INPUT;
+extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_PASSWORD_INPUT;
+extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_PASSWORD_INPUT_WITH_VERIFY;
+extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_SPINNER;
+extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_PROGRESS_BAR;
+
 typedef void *(*showDialog_fn_t)(
   void *dlgContext,
   SN_DIALOG_TYPE dialogType,
   const char *title,
   const char *msg,
-  const unsigned char withTextInput,
+  const unsigned char accessoryType,
+  const char *accessoryText,
   unsigned long inputContext);
 typedef void (*dismissDialog_fn_t)(
   void *dlgContext,
@@ -42,6 +53,7 @@ typedef void (*getInput_fn_t)(
   SN_DIALOG_TYPE type,
   const char *title, 
   const char *msg, 
+  const char *defaultInput,
   unsigned long inputContext,
   getInput_result_fn_t inputHandler);
 

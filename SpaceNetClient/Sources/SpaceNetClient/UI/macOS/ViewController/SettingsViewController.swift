@@ -7,7 +7,7 @@ import Cocoa
 import SpaceNetKitGo
 #endif
 
-class SettingsViewController: NSViewController {
+class SettingsViewController: NSViewController, NSTextFieldDelegate {
 
     let deviceUser: EditableKeyValueRow = {
         let deviceUser = EditableKeyValueRow()
@@ -89,14 +89,6 @@ class SettingsViewController: NSViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewWillAppear() {
-        setDialogHandlers(target: self)
-    }
-
-    override func viewDidDisappear() {
-        resetDialogHandlers(target: self)
-    }
-
     override func loadView() {
         populateFields()
 
@@ -146,10 +138,60 @@ class SettingsViewController: NSViewController {
         // ****
     }
 
+    override func viewWillAppear() {
+        setDialogHandlers(target: self)
+    }
+
+    override func viewDidLoad() {
+        if snEULAAccepted() == 0 {
+            DispatchQueue.main.async { [weak self ] in
+                guard
+                    let self = self
+                else { return }
+
+                if let window = self.view.window {
+                    _ = showSimpleDialog(
+                        window: window,
+                        dialogType: SN_DIALOG_ALERT,
+                        title: "Terms of Use",
+                        msg: "",
+                        accessoryType: SN_DIALOG_ACCESSORY_YES_NO,
+                        accessoryText: "Before you can use the MyCS SpaceNet client you need to review and accept the [AppBricks, Inc. Software End User Agreement](https://appbricks.io/eula/).\n\nDo you agree to the terms?"
+                    ) { ok, _ in
+                        if ok {
+                            snSetEULAAccepted()
+                        } else {
+                            self.presentingViewController?.dismiss(self)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override func viewDidDisappear() {
+        resetDialogHandlers(target: self)
+    }
+
     func populateFields() {
     }
 
     func handleLoginDeviceUser(_: Int) {
+        snAuthenticate(Unmanaged.passUnretained(self).toOpaque()) { context, username in
+            guard
+                let context = context,
+                let username = username
+            else { return }
+
+            let unretainedSelf = Unmanaged<SettingsViewController>.fromOpaque(context).takeUnretainedValue()
+            DispatchQueue.main.async { [weak unretainedSelf ] in
+                guard
+                    let unretainedSelf = unretainedSelf
+                else { return }
+
+                unretainedSelf.deviceUser.value = String(cString: username)
+            }
+        }
     }
 
     func handleOpenDeviceUserKeyFile(i: Int) {
@@ -173,12 +215,28 @@ class SettingsViewController: NSViewController {
                 guard response == .OK else { return }
                 print(savePanel.url)
             }
-
         }
     }
 
     @objc func handleSaveAction() {
-        self.presentingViewController?.dismiss(self)
+
+        if let window = self.view.window {
+            _ = showSimpleDialog(
+                window: window,
+                dialogType: SN_DIALOG_ALERT,
+                title: "SpaceNet Config Locked",
+                msg: "Please enter the passphrase to unlock the configuration",
+                accessoryType: SN_DIALOG_ACCESSORY_PASSWORD_INPUT_WITH_VERIFY
+            ) { ok, passphrase in
+                if ok {
+                    print("passphrase: " + passphrase)
+                } else {
+                    print("canceled")
+                }
+            }
+        }
+
+//        self.presentingViewController?.dismiss(self)
     }
 
     @objc func handleDiscardAction() {
@@ -188,11 +246,12 @@ class SettingsViewController: NSViewController {
     // **** UI TESTS
     @objc func handleTestInputAction() {
         let context = Unmanaged.passUnretained(self).toOpaque()
-        snTESTdialogInput(context) { context, dialogType, title, msg, inputContext, inputHandler in
+        snTESTdialogInput(context) { context, dialogType, title, msg, defaultInput, inputContext, inputHandler in
             guard
                 let context = context,
                 let title = title,
                 let msg = msg,
+                let defaultInput = defaultInput,
                 let inputHandler = inputHandler
             else { return }
 
@@ -201,8 +260,16 @@ class SettingsViewController: NSViewController {
 
                 let inTitle = String(cString: title)
                 let inMsg = String(cString: msg)
+                let inDefaultInput = String(cString: defaultInput)
 
-                _ = showSimpleDialog(window: window, dialogType: dialogType, title: inTitle, msg: inMsg, withTextInput: true) { ok, result in
+                _ = showSimpleDialog(
+                    window: window,
+                    dialogType: dialogType,
+                    title: inTitle,
+                    msg: inMsg,
+                    accessoryType: SN_DIALOG_ACCESSORY_TEXT_INPUT,
+                    accessoryText: inDefaultInput
+                ) { ok, result in
                     inputHandler(inputContext, ok ? 1 : 0, (result as NSString).utf8String)
                 }
             }

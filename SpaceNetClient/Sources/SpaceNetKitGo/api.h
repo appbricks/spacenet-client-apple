@@ -24,5 +24,10 @@ typedef void (*set_cfg_status)(void *context, const SN_CFG_STATUS status);
 extern void snRegisterStatusChangeHandler(void *context, set_cfg_status handler);
 
 extern void snInitializeContext(const char *passphrase);
+extern unsigned char snEULAAccepted();
+extern void snSetEULAAccepted();
+
+typedef void (*on_logged_in)(void *context, const char *username);
+extern void snAuthenticate(void *context, on_logged_in handler);
 
 #endif
