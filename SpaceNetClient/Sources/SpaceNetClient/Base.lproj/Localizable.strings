@@ -12,8 +12,14 @@
 "initDeviceUser" = "Device Owner";
 "initDeviceUserKey" = "Owner's Private Key";
 "initDeviceName" = "Device Name";
-"initPassphrase" = "Device Lock Passphrase";
-"initUnlockTimeout" = "Device Unlocked Timeout";
+"initDevicePassphrase" = "Device Lock Passphrase";
+"initUnlockedTimeout" = "Device Unlocked Timeout";
+
+"timeout24h" = "24 hours";
+"timeout12h" = "12 hours";
+"timeout1h" = "1 hour";
+"timeout30m" = "30 minutes";
+"timeout15m" = "15 minutes";
 
 // Tunnels list UI
 
@@ -351,13 +357,17 @@
 
 // Mac initialize window
 
-"macButtonLogin" = "Login Device User";
+"macButtonLoginDeviceUser" = "Login Device User";
+"macButtonResetDeviceUser" = "Reset Device User";
 "macButtonOpenKeyFile" = "Open";
 "macButtonCreateKeyFile" = "Create";
+"macButtonUpdateKeyFile" = "Update";
+"macButtonSetPassphrase" = "Set Passphrase";
+"macButtonUpdatePassphrase" = "Update Passphrase";
 
 // Mac manage tunnels window
 
-"macWindowTitleSpaceeNetwork" = "Your Space and Application Nodes";
+"macWindowTitleSpaceNetwork" = "Your Space and Application Nodes";
 
 "macDeleteTunnelConfirmationAlertMessage (%@)" = "Are you sure you want to delete ‘%@’?";
 "macDeleteMultipleTunnelsConfirmationAlertMessage (%d)" = "Are you sure you want to delete %d tunnels?";
@@ -382,6 +392,7 @@
 // Mac detail/edit view fields
 
 "macFieldKey (%@)" = "%@:";
+"macFieldUnlockedTimeout" = "Unlocked Timeout";
 "macFieldOnDemand" = "On-Demand:";
 "macFieldOnDemandSSIDs" = "SSIDs:";
 
@@ -435,13 +446,13 @@
 
 // Mac alert
 
-"macConfirmAndQuitAlertMessage" = "Do you want to close the tunnels manager or quit WireGuard entirely?";
-"macConfirmAndQuitAlertInfo" = "If you close the tunnels manager, WireGuard will continue to be available from the menu bar icon.";
-"macConfirmAndQuitInfoWithActiveTunnel (%@)" = "If you close the tunnels manager, WireGuard will continue to be available from the menu bar icon.\n\nNote that if you quit WireGuard entirely the currently active tunnel ('%@') will still remain active until you deactivate it from this application or through the Network panel in System Preferences.";
-"macConfirmAndQuitAlertQuitWireGuard" = "Quit WireGuard";
-"macConfirmAndQuitAlertCloseWindow" = "Close Tunnels Manager";
+"macConfirmAndQuitAlertMessage" = "Do you want to close the space network manager or quit the SpaceNet client entirely?";
+"macConfirmAndQuitAlertInfo" = "If you close the space network manager, the SpaceNet client will continue to be available from the menu bar icon.";
+"macConfirmAndQuitInfoWithActiveTunnel (%@)" = "If you close the space network manager, the SpaceNet client will continue to be available from the menu bar icon.\n\nNote that if you quit the SpaceNet client entirely the currently active tunnel to the space network ('%@') will still remain active until you deactivate it from this application or through the Network panel in System Preferences.";
+"macConfirmAndQuitAlertQuitWireGuard" = "Quit SpaceNet Client";
+"macConfirmAndQuitAlertCloseWindow" = "Close Space Network Manager";
 
-"macAppExitingWithActiveTunnelMessage" = "WireGuard is exiting with an active tunnel";
+"macAppExitingWithActiveTunnelMessage" = "SpaceNet client is exiting with an active tunnel";
 "macAppExitingWithActiveTunnelInfo" = "The tunnel will remain active after exiting. You may disable it by reopening this application or through the Network panel in System Preferences.";
 
 // Mac tooltip

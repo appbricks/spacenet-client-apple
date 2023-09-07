@@ -70,7 +70,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.statusItemController = statusItemController
 
                 if !isLaunchedAtLogin {
-                    self.showManageTunnelsWindow(completion: nil)
+                    self.showManageTunnelsWindow { manageTunnelsWindow in
+                        guard
+                            let manageTunnelsWindow = manageTunnelsWindow
+                        else { return }
+
+                        // **** AppBricks: Check if EULA accepted
+                        if snEULAAccepted() == 0 {
+                            _ = showSimpleDialog(
+                                window: manageTunnelsWindow,
+                                dialogType: SN_DIALOG_ALERT,
+                                title: "Terms of Use",
+                                msg: "",
+                                accessoryType: SN_DIALOG_ACCESSORY_YES_NO,
+                                accessoryText: "Before you can use the MyCS SpaceNet client you need to review and accept the [AppBricks, Inc. Software End User Agreement](https://appbricks.io/eula/).\n\nDo you agree to the terms?"
+                            ) { ok, _ in
+                                if ok {
+                                    snSetEULAAccepted()
+                                } else {
+                                    manageTunnelsWindow.contentViewController?.dismiss(self)
+                                }
+                            }
+                        }
+                        // ****
+                    }
                 }
             }
         }
@@ -226,7 +249,7 @@ extension AppDelegate: StatusMenuWindowDelegate {
         if manageTunnelsWindowObject == nil {
             manageTunnelsRootVC = ManageTunnelsRootViewController(tunnelsManager: tunnelsManager)
             let window = NSWindow(contentViewController: manageTunnelsRootVC!)
-            window.title = tr("macWindowTitleSpaceeNetwork")
+            window.title = tr("macWindowTitleSpaceNetwork")
             window.setContentSize(NSSize(width: 800, height: 480))
             window.setFrameAutosaveName(NSWindow.FrameAutosaveName("ManageTunnelsWindow")) // Auto-save window position and size
             manageTunnelsWindowObject = window

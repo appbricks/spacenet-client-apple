@@ -5,9 +5,17 @@
 
 package main
 
+// #include <stdlib.h>
+//
+// typedef unsigned char BOOL;
+// const BOOL FALSE = 0;
+// const BOOL TRUE = 1;
+import "C"
+
 import (
 	"os"
 
+	"github.com/appbricks/cloud-builder/config"
 	"github.com/mevansam/goutils/logger"
 	homedir "github.com/mitchellh/go-homedir"
 )
@@ -16,6 +24,9 @@ var (
 	homeDir string
 
 	isProd = "no"
+
+  ClientType = `spacenet-client`
+	Version = `0.0.0`
 )
 
 func init() {
@@ -45,6 +56,13 @@ func init() {
 	homeDir, err = homedir.Dir()
 	if err != nil {
 		showErrorAndExit(err.Error())
+	}
+
+	// set default device lock password
+	if systemPassphrase := os.Getenv("CBS_SYSTEM_PASSPHRASE"); len(systemPassphrase) > 0 {
+		config.SystemPassphrase = func() string {
+			return systemPassphrase
+		}
 	}
 }
 

@@ -16,14 +16,7 @@ class EditableKeyValueRow: NSView {
         return keyLabel
     }()
 
-    let valueLabel: NSTextField = {
-        let valueLabel = NSTextField()
-        valueLabel.isSelectable = true
-        valueLabel.maximumNumberOfLines = 1
-        valueLabel.lineBreakMode = .byTruncatingTail
-        return valueLabel
-    }()
-
+    let valueLabel: NSTextField
     let valueImageView: NSImageView?
 
     var key: String {
@@ -53,17 +46,25 @@ class EditableKeyValueRow: NSView {
     var isOnDemandEnabledObservationToken: AnyObject?
     var hasOnDemandRulesObservationToken: AnyObject?
 
+    var valueObserver: TextFieldObserver?
+
     override var intrinsicContentSize: NSSize {
         let height = max(keyLabel.intrinsicContentSize.height, valueLabel.intrinsicContentSize.height)
         return NSSize(width: NSView.noIntrinsicMetric, height: height)
     }
 
     convenience init() {
-        self.init(hasValueImage: false)
+        self.init(hasValueImage: false, isSecure: false)
     }
 
-    fileprivate init(hasValueImage: Bool) {
+    fileprivate init(hasValueImage: Bool, isSecure: Bool) {
+
+        valueLabel = isSecure ? NSSecureTextField() : NSTextField()
+        valueLabel.isSelectable = true
+        valueLabel.maximumNumberOfLines = 1
+        valueLabel.lineBreakMode = .byTruncatingTail
         valueImageView = hasValueImage ? NSImageView() : nil
+
         super.init(frame: CGRect.zero)
 
         addSubview(keyLabel)
@@ -113,12 +114,23 @@ class EditableKeyValueRow: NSView {
         statusObservationToken = nil
         isOnDemandEnabledObservationToken = nil
         hasOnDemandRulesObservationToken = nil
+
+        if let valueObserver = self.valueObserver {
+            valueObserver.unsuscribeFromTextDidChangeNotification()
+        }
+    }
+
+    func handleValueChange(onChange: @escaping (_: String) -> Void) {
+        self.valueObserver = TextFieldObserver(textField: self.valueLabel)
+        self.valueObserver!.subscribeToTextDidChangeNotification { textField in
+            onChange(textField.stringValue)
+        }
     }
 }
 
 class KeyValueRow: EditableKeyValueRow {
     init() {
-        super.init(hasValueImage: false)
+        super.init(hasValueImage: false, isSecure: false)
         valueLabel.isEditable = false
         valueLabel.isBordered = false
         valueLabel.backgroundColor = .clear
@@ -131,10 +143,20 @@ class KeyValueRow: EditableKeyValueRow {
 
 class KeyValueImageRow: EditableKeyValueRow {
     init() {
-        super.init(hasValueImage: true)
+        super.init(hasValueImage: true, isSecure: false)
         valueLabel.isEditable = false
         valueLabel.isBordered = false
         valueLabel.backgroundColor = .clear
+    }
+
+    required init?(coder decoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class SecureKeyValueRow: EditableKeyValueRow {
+    init() {
+        super.init(hasValueImage: false, isSecure: true)
     }
 
     required init?(coder decoder: NSCoder) {

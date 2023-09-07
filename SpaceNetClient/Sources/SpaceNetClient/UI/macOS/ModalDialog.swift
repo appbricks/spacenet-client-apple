@@ -14,7 +14,7 @@ func showSimpleDialog(
     accessoryType: UInt8,
     accessoryText: String = "",
     onDone: @escaping (_: Bool, _: String) -> Void
-) -> NSAlert {
+) -> NSAlert? {
 
     let alertDialog = NSAlert()
     alertDialog.messageText = title
@@ -114,6 +114,27 @@ func showSimpleDialog(
             observer.unsuscribeFromTextDidChangeNotification()
         }
 
+    case SN_DIALOG_ACCESSORY_FILE_OPEN:
+        let openPanel = NSOpenPanel()
+        openPanel.prompt = title
+        openPanel.message = msg
+        openPanel.allowsMultipleSelection = false
+
+        if !accessoryText.isEmpty {
+            let openDelegate = OpenDelegate(accessoryText)
+            openPanel.delegate = openDelegate
+        }
+
+        openPanel.beginSheetModal(for: window) { response in
+            if response == .OK {
+                onDone(true, String(openPanel.urls[0].absoluteString.dropFirst("file://".count)))
+            } else {
+                onDone(false, "")
+            }
+        }
+
+        return nil
+
     case SN_DIALOG_ACCESSORY_SPINNER:
         let spinnerImage = NSImage(data: NSDataAsset(name: "SpinningGlobe")!.data)
         let spinnerView = NSImageView(image: spinnerImage!)
@@ -141,6 +162,7 @@ func showSimpleDialog(
     default:
         if !accessoryText.isEmpty {
             let textView = NSTextView()
+            textView.isEditable = false
             if let rect = textView.layoutManager?.usedRect(for: textView.textContainer!) {
                 textView.layoutManager?.ensureLayout(for: textView.textContainer!)
                 textView.font = NSFont.systemFont(ofSize: NSFont.systemFontSize)
@@ -174,7 +196,7 @@ func showSimpleDialog(
 
 func setDialogHandlers(target: NSViewController) {
     let context = Unmanaged.passUnretained(target).toOpaque()
-    snRegisterShowDialogFunc(context) { context, dialogType, title, msg, accessoryType, accessoryText, inputContext in
+    snRegisterShowDialogFunc(context) { context, dialogType, title, msg, accessoryType, accessoryText, dispatchToMain, inputContext in
         guard
             let context = context,
             let title = title,
@@ -182,27 +204,50 @@ func setDialogHandlers(target: NSViewController) {
             let accessoryText = accessoryText
         else { return nil }
 
+        let inTitle = String(cString: title)
+        let inMsg = String(cString: msg)
+        let inAccessoryText = String(cString: accessoryText)
+
         let unretainedSelf = Unmanaged<NSViewController>.fromOpaque(context).takeUnretainedValue()
-        if let window = unretainedSelf.view.window {
+        if dispatchToMain == 0 {
 
-            let inTitle = String(cString: title)
-            let inMsg = String(cString: msg)
-            let inAccessoryText = String(cString: accessoryText)
-
-            let alertDialog = showSimpleDialog(
-                window: window,
-                dialogType: dialogType,
-                title: inTitle,
-                msg: inMsg,
-                accessoryType: accessoryType,
-                accessoryText: inAccessoryText
-            ) { ok, result in
-                snHandleDialogInput(inputContext, ok ? 1 : 0, (result as NSString).utf8String)
+            if let window = unretainedSelf.view.window {
+                let alertDialog = showSimpleDialog(
+                    window: window,
+                    dialogType: dialogType,
+                    title: inTitle,
+                    msg: inMsg,
+                    accessoryType: accessoryType,
+                    accessoryText: inAccessoryText
+                ) { ok, result in
+                    snHandleDialogInput(inputContext, ok ? 1 : 0, (result as NSString).utf8String)
+                }
+                if let alertDialog = alertDialog {
+                    return Unmanaged.passUnretained(alertDialog).toOpaque()
+                }
             }
-            return Unmanaged.passUnretained(alertDialog).toOpaque()
+
         } else {
-            return nil
+            DispatchQueue.main.async {
+                if let window = unretainedSelf.view.window {
+                    let alertDialog = showSimpleDialog(
+                        window: window,
+                        dialogType: dialogType,
+                        title: inTitle,
+                        msg: inMsg,
+                        accessoryType: accessoryType,
+                        accessoryText: inAccessoryText
+                    ) { ok, result in
+                        snHandleDialogInput(inputContext, ok ? 1 : 0, (result as NSString).utf8String)
+                    }
+                    if let alertDialog = alertDialog {
+                        snAssociateDialogInputToHandle(inputContext, Unmanaged.passUnretained(alertDialog).toOpaque())
+                    }
+                }
+            }
         }
+
+        return nil
     }
     snSetDialogDismissHandler(context) {context, handle in
         guard
@@ -212,13 +257,15 @@ func setDialogHandlers(target: NSViewController) {
 
         let unretainedSelf = Unmanaged<NSViewController>.fromOpaque(context).takeUnretainedValue()
         let unretainedAlertDialog = Unmanaged<NSAlert>.fromOpaque(handle).takeUnretainedValue()
-        DispatchQueue.main.async { [weak unretainedAlertDialog ] in
+        DispatchQueue.main.async { [weak unretainedSelf, weak unretainedAlertDialog] in
             guard
                 let unretainedAlertDialog = unretainedAlertDialog,
-                let window = unretainedSelf.view.window
+                let unretainedSelf = unretainedSelf
             else { return }
 
-            window.endSheet(unretainedAlertDialog.window)
+            if let window = unretainedSelf.view.window {
+                window.endSheet(unretainedAlertDialog.window)
+            }
         }
     }
 }
@@ -227,37 +274,16 @@ func resetDialogHandlers(target: NSViewController) {
     snUnregisterShowDialogFunc(Unmanaged.passUnretained(target).toOpaque())
 }
 
-class TextFieldObserver {
+class OpenDelegate: NSObject, NSOpenSavePanelDelegate {
+    private var allowedTypes: [String] = []
 
-    var textField: NSTextField
-
-    var onChange: ((_: NSTextField) -> Void)?
-
-    init(textField: NSTextField) {
-        self.textField = textField
+    init(_ types: String) {
+        self.allowedTypes = types.components(separatedBy: ",")
     }
-
-    func subscribeToTextDidChangeNotification(onChange: @escaping (_: NSTextField) -> Void) {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(textFieldDidChange(_:)),
-            name: NSControl.textDidChangeNotification,
-            object: self.textField
-        )
-        self.onChange = onChange
-    }
-
-    func unsuscribeFromTextDidChangeNotification() {
-        NotificationCenter.default.removeObserver(
-            self,
-            name: NSControl.textDidChangeNotification,
-            object: self.textField
-        )
-    }
-
-    @objc func textFieldDidChange(_ notification: Notification) {
-        if let onChange = self.onChange, let textField = notification.object as? NSTextField {
-            onChange(textField)
+    func panel(_ sender: Any, shouldEnable url: URL) -> Bool {
+        if url.isFileURL && !url.hasDirectoryPath {
+            return allowedTypes.contains(url.pathExtension)
         }
+        return false
     }
 }

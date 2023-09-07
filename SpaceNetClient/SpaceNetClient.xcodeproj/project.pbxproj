@@ -7,16 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		087525962A9E39A0004F6601 /* TitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087525952A9E39A0004F6601 /* TitleLabel.swift */; };
+		087525982AA926A5004F6601 /* TextFieldObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087525972AA926A5004F6601 /* TextFieldObserver.swift */; };
 		087C00EE2A68846700DB490C /* libsn-go.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 087C00ED2A68846700DB490C /* libsn-go.a */; };
 		087C00F02A68CCAD00DB490C /* libsn-go.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 087C00EF2A68CCAD00DB490C /* libsn-go.a */; };
 		087C00F42A6AEFEB00DB490C /* ModalDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 087C00F22A6AEFEB00DB490C /* ModalDialog.swift */; };
 		087DE8AC2A787EDB005F0C1A /* Down in Frameworks */ = {isa = PBXBuildFile; productRef = 087DE8AB2A787EDB005F0C1A /* Down */; };
 		087DE8AF2A795E62005F0C1A /* DSFSecureTextField in Frameworks */ = {isa = PBXBuildFile; productRef = 087DE8AE2A795E62005F0C1A /* DSFSecureTextField */; };
+		08A92EEC2A7AC01A0067A103 /* UnlockedTimeoutOptionsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A92EEB2A7AC01A0067A103 /* UnlockedTimeoutOptionsRow.swift */; };
 		08BC24C62A6215850096C6A0 /* SpaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BC24C52A6215850096C6A0 /* SpaceManager.swift */; };
 		08BC24C92A6324460096C6A0 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BC24C72A62E1E20096C6A0 /* SettingsViewController.swift */; };
 		08BC24CB2A632CAE0096C6A0 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BC24CA2A632CAE0096C6A0 /* SettingsViewModel.swift */; };
 		08BC24CC2A632CAE0096C6A0 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BC24CA2A632CAE0096C6A0 /* SettingsViewModel.swift */; };
-		08BC24CE2A6637510096C6A0 /* UnlockTimeoutControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BC24CD2A6637510096C6A0 /* UnlockTimeoutControls.swift */; };
 		08D8B5D22A6C49DF0093A4F4 /* SpaceNetContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8B5D12A6C49DF0093A4F4 /* SpaceNetContextMenu.swift */; };
 		08D8B5D42A6C8F7E0093A4F4 /* ConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8B5D32A6C8F7E0093A4F4 /* ConfigManager.swift */; };
 		08D8B5D62A6CD5F10093A4F4 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 08D8B5D52A6CD5F10093A4F4 /* libresolv.tbd */; };
@@ -310,14 +312,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		087525952A9E39A0004F6601 /* TitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleLabel.swift; sourceTree = "<group>"; };
+		087525972AA926A5004F6601 /* TextFieldObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldObserver.swift; sourceTree = "<group>"; };
 		087C00ED2A68846700DB490C /* libsn-go.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libsn-go.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		087C00EF2A68CCAD00DB490C /* libsn-go.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libsn-go.a"; path = "../../../../../libsn-go.a"; sourceTree = "<group>"; };
 		087C00F12A6AE70800DB490C /* WireGuardKitGo */ = {isa = PBXFileReference; lastKnownFileType = folder; name = WireGuardKitGo; path = Sources/WireGuardKitGo; sourceTree = "<group>"; };
 		087C00F22A6AEFEB00DB490C /* ModalDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalDialog.swift; sourceTree = "<group>"; };
+		08A92EEB2A7AC01A0067A103 /* UnlockedTimeoutOptionsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockedTimeoutOptionsRow.swift; sourceTree = "<group>"; };
 		08BC24C52A6215850096C6A0 /* SpaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceManager.swift; sourceTree = "<group>"; };
 		08BC24C72A62E1E20096C6A0 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		08BC24CA2A632CAE0096C6A0 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
-		08BC24CD2A6637510096C6A0 /* UnlockTimeoutControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockTimeoutControls.swift; sourceTree = "<group>"; };
 		08D8B5D12A6C49DF0093A4F4 /* SpaceNetContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceNetContextMenu.swift; sourceTree = "<group>"; };
 		08D8B5D32A6C8F7E0093A4F4 /* ConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigManager.swift; sourceTree = "<group>"; };
 		08D8B5D52A6CD5F10093A4F4 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.1.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
@@ -614,7 +618,8 @@
 				6FB17945222FD5960018AE71 /* OnDemandWiFiControls.swift */,
 				6FDB6D14224CB2CE00EE4BC3 /* LogViewCell.swift */,
 				6F1075632258AE9800D78929 /* DeleteTunnelsConfirmationAlert.swift */,
-				08BC24CD2A6637510096C6A0 /* UnlockTimeoutControls.swift */,
+				08A92EEB2A7AC01A0067A103 /* UnlockedTimeoutOptionsRow.swift */,
+				087525952A9E39A0004F6601 /* TitleLabel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -755,6 +760,7 @@
 				6FFACD1E21E4D89600E9A2A5 /* ParseError+WireGuardAppError.swift */,
 				08D8B5D12A6C49DF0093A4F4 /* SpaceNetContextMenu.swift */,
 				087C00F22A6AEFEB00DB490C /* ModalDialog.swift */,
+				087525972AA926A5004F6601 /* TextFieldObserver.swift */,
 				6FB1BD6621D2607E00A991BF /* Info.plist */,
 				6FB1BD6721D2607E00A991BF /* WireGuard.entitlements */,
 			);
@@ -1450,6 +1456,7 @@
 				6FBA104621D7EBFA0051C35F /* TunnelsListTableViewController.swift in Sources */,
 				6FB1BDD321D50F5300A991BF /* ZipArchive.swift in Sources */,
 				6FB1BDD421D50F5300A991BF /* ioapi.c in Sources */,
+				087525982AA926A5004F6601 /* TextFieldObserver.swift in Sources */,
 				6FDB3C3C21DCF6BB00A0C0BF /* TunnelViewModel.swift in Sources */,
 				6FDB6D13224A15BF00EE4BC3 /* LogViewController.swift in Sources */,
 				6B5C5E29220A48D30024272E /* Keychain.swift in Sources */,
@@ -1488,7 +1495,9 @@
 				6FB1BDBE21D50F0200A991BF /* Logger.swift in Sources */,
 				6F6483E7229293300075BA15 /* LaunchedAtLoginDetector.swift in Sources */,
 				6FB1BDBF21D50F0200A991BF /* TunnelConfiguration+WgQuickConfig.swift in Sources */,
+				087525962A9E39A0004F6601 /* TitleLabel.swift in Sources */,
 				6FADE96C2254B8C300B838A4 /* UnusableTunnelDetailViewController.swift in Sources */,
+				08A92EEC2A7AC01A0067A103 /* UnlockedTimeoutOptionsRow.swift in Sources */,
 				6FFACD2021E4D8D500E9A2A5 /* ParseError+WireGuardAppError.swift in Sources */,
 				6FB1BDC021D50F0200A991BF /* NETunnelProviderProtocol+Extension.swift in Sources */,
 				6F1075642258AE9800D78929 /* DeleteTunnelsConfirmationAlert.swift in Sources */,
@@ -1507,7 +1516,6 @@
 				6FB1BDC921D50F0300A991BF /* FileManager+Extension.swift in Sources */,
 				585B10942577E294004F691E /* key.c in Sources */,
 				08BC24CC2A632CAE0096C6A0 /* SettingsViewModel.swift in Sources */,
-				08BC24CE2A6637510096C6A0 /* UnlockTimeoutControls.swift in Sources */,
 				585B10682577E294004F691E /* TunnelConfiguration.swift in Sources */,
 				6FB1BD6021D2607A00A991BF /* AppDelegate.swift in Sources */,
 			);

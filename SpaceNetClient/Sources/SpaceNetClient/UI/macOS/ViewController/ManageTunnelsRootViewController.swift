@@ -58,6 +58,14 @@ class ManageTunnelsRootViewController: NSViewController {
         ])
     }
 
+    override func viewWillAppear() {
+        setDialogHandlers(target: self)
+    }
+
+    override func viewDidDisappear() {
+        resetDialogHandlers(target: self)
+    }
+
     private func setTunnelDetailContentVC(_ contentVC: NSViewController) {
         if let currentContentVC = tunnelDetailContentVC {
             currentContentVC.view.removeFromSuperview()

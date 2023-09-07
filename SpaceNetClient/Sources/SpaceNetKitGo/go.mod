@@ -84,6 +84,7 @@ require (
 	github.com/markbates/oncer v1.0.0 // indirect
 	github.com/markbates/safe v1.0.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/mdlayher/genetlink v1.3.2 // indirect
 	github.com/mdlayher/netlink v1.7.2 // indirect
 	github.com/mdlayher/socket v0.4.1 // indirect
@@ -96,8 +97,10 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/otiai10/copy v1.9.0 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
+	github.com/peterh/liner v1.2.2 // indirect
 	github.com/pkg/browser v0.0.0-20210115035449-ce105d075bb4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e // indirect
 	github.com/spf13/afero v1.8.1 // indirect

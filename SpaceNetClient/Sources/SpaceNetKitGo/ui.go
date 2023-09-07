@@ -24,11 +24,12 @@ package main
 // const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_TEXT_INPUT = 3;
 // const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_PASSWORD_INPUT = 4;
 // const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_PASSWORD_INPUT_WITH_VERIFY = 5;
-// const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_SPINNER = 6;
-// const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_PROGRESS_BAR = 7;
+// const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_FILE_OPEN = 6;
+// const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_SPINNER = 7;
+// const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_PROGRESS_BAR = 8;
 //
-// static void *showDialog(void *func, void *ctx, const unsigned char dialogType, const char *title, const char *msg, const unsigned char accessoryType, const char *accessoryText, unsigned long inputContext) {
-//   return ((void *(*)(void *, const unsigned char, const char *, const char *, const unsigned char, const char *, unsigned long))func)(ctx, dialogType, title, msg, accessoryType, accessoryText, inputContext);
+// static void *showDialog(void *func, void *ctx, const unsigned char dialogType, const char *title, const char *msg, const unsigned char accessoryType, const char *accessoryText, const unsigned char dispathToMain, unsigned long inputContext) {
+//   return ((void *(*)(void *, const unsigned char, const char *, const char *, const unsigned char, const char *, const unsigned char, unsigned long))func)(ctx, dialogType, title, msg, accessoryType, accessoryText, dispathToMain, inputContext);
 // }
 // static void dismissDialog(void *func, void *ctx, void* handle) {
 //   ((void(*)(void *, void *))func)(ctx, handle);
@@ -52,20 +53,16 @@ import (
 	"unsafe"
 
 	"github.com/appbricks/mycloudspace-client/ui"
+	"github.com/mevansam/goutils/logger"
 )
 
 var (
 	showDialogFuncs = make(map[uintptr]*dialogContext)
+
+	dialogHandleLookup = make(map[uintptr]uintptr)
 )
 
 const (
-	SN_CFG_STATUS_ERROR       = 0
-	SN_CFG_STATUS_NEEDS_INIT  = 1
-	SN_CFG_STATUS_NEEDS_LOGIN = 2
-	SN_CFG_STATUS_LOGGED_IN   = 3
-	SN_CFG_STATUS_LOGGED_OUT  = 4
-	SN_CFG_STATUS_LOCKED      = 5
-
 	SN_DIALOG_APP = 0
 	SN_DIALOG_NOTIFY = 1
 	SN_DIALOG_ALERT = 2
@@ -77,8 +74,9 @@ const (
 	SN_DIALOG_ACCESSORY_TEXT_INPUT = 3
 	SN_DIALOG_ACCESSORY_PASSWORD_INPUT = 4
 	SN_DIALOG_ACCESSORY_PASSWORD_INPUT_WITH_VERIFY = 5
-	SN_DIALOG_ACCESSORY_SPINNER = 6
-	SN_DIALOG_ACCESSORY_PROGRESS_BAR = 7
+	SN_DIALOG_ACCESSORY_FILE_OPEN = 6
+	SN_DIALOG_ACCESSORY_SPINNER = 7
+	SN_DIALOG_ACCESSORY_PROGRESS_BAR = 8
 
 	EMPTY_STRING = ""
 )
@@ -128,12 +126,33 @@ func snHandleDialogInput(inputContext uintptr, ok uint8, result *C.char) {
 	} else {
 		inputHandle.input <- nil
 	}
+	delete(dialogHandleLookup, inputContext)
 }
 
-func showDialog(dlgContext uintptr, dialogType int, title, msg string, accessoryType int, accessoryText string, inputHandle *dialogInputHandle) *dialogHandle {
+//export snAssociateDialogInputToHandle
+func snAssociateDialogInputToHandle(inputContext, handle uintptr) {
+	dialogHandleLookup[inputContext] = handle
+}
+
+func showDialog(
+	dlgContext uintptr, 
+	dialogType int, 
+	title, msg string, 
+	accessoryType int, 
+	accessoryText string, 
+	dispathToMain bool,
+	inputHandle *dialogInputHandle,
+) *dialogHandle {
 	if dc, ok := showDialogFuncs[dlgContext]; ok {
+
 		context := unsafe.Pointer(dlgContext)
 		showFunc := unsafe.Pointer(dc.showFunc)
+
+		dispatch := C.uchar(0)
+		if dispathToMain {
+			dispatch = C.uchar(1)
+		}
+
 		if uintptr(showFunc) != 0 {
 			return &dialogHandle{
 				dlgContext: dlgContext,
@@ -144,26 +163,46 @@ func showDialog(dlgContext uintptr, dialogType int, title, msg string, accessory
 					C.CString(msg),
 					C.uchar(accessoryType),
 					C.CString(accessoryText),
+					dispatch,
 					C.ulong(uintptr(unsafe.Pointer(inputHandle))),
 				)),
 			}		
 		}	
+	} else {
+		logger.ErrorMessage("No show dialog function registered for context %x", dlgContext)
 	}
 	return nil
 }
 
 func dismissDialog(handle *dialogHandle) {
-	if dc, ok := showDialogFuncs[handle.dlgContext]; ok && handle.dlgHandle != 0 {
-		context := unsafe.Pointer(handle.dlgContext)
-		handle := unsafe.Pointer(handle.dlgHandle)
-		dismissFunc := unsafe.Pointer(dc.dismissHandler)
-		if uintptr(dismissFunc) != 0 {
-			C.dismissDialog(dismissFunc, context, handle)
-		}	
+	if dc, ok := showDialogFuncs[handle.dlgContext]; ok {
+		if handle.dlgHandle == 0 {
+			handle.dlgHandle = dialogHandleLookup[uintptr(unsafe.Pointer(handle.dlgInputHandle))]
+		}
+
+		if handle.dlgHandle != 0 {
+			context := unsafe.Pointer(handle.dlgContext)
+			handle := unsafe.Pointer(handle.dlgHandle)
+			dismissFunc := unsafe.Pointer(dc.dismissHandler)
+			if uintptr(dismissFunc) != 0 {
+				C.dismissDialog(dismissFunc, context, handle)
+			}
+
+		} else {
+			logger.ErrorMessage("Dismiss dialog handle was nil")
+		}
+
+	} else {
+		logger.ErrorMessage("No dismiss dialog function registered for context %x", handle.dlgContext)
 	}
 }
 
-func getInput(context, getInputFn uintptr, dialogType int, title, msg, defaultInput string, inputHandle *dialogInputHandle) {
+func getInput(
+	context, getInputFn uintptr, 
+	dialogType int, 
+	title, msg, defaultInput string, 
+	inputHandle *dialogInputHandle,
+) {
 	dlgContext := unsafe.Pointer(context)
 	getInputFunc := unsafe.Pointer(getInputFn)
 	if uintptr(getInputFunc) != 0 {
@@ -180,13 +219,14 @@ func getInput(context, getInputFn uintptr, dialogType int, title, msg, defaultIn
 
 // Implements UI interface
 type appUI struct {
-	cancel context.CancelFunc
-
 	dlgContext uintptr
+
+	dispatchToMain bool
 }
 
 type appMessage struct {
-	appUI *appUI
+	appUI  *appUI
+	cancel context.CancelFunc
 
 	dialogType int
 	title      string
@@ -205,11 +245,17 @@ type appProgressIndicator struct {
 	endMsg string
 }
 
-func NewAppUI(cancel context.CancelFunc, dlgContext uintptr) ui.UI {
+func NewAppUI(dlgContext uintptr) ui.UI {
 	return &appUI{
-		cancel: cancel,
+		dlgContext:     dlgContext,
+		dispatchToMain: false,
+	}
+}
 
-		dlgContext: dlgContext,
+func NewAppUIBackground(dlgContext uintptr) ui.UI {
+	return &appUI{
+		dlgContext:     dlgContext,
+		dispatchToMain: true,
 	}
 }
 
@@ -220,6 +266,40 @@ func (ui *appUI) NewUIMessage(title string) ui.Message {
 		title:      title,
 		dialogType: SN_DIALOG_APP,
 	}
+}
+
+func (ui *appUI) NewUIMessageWithCancel(title string, cancel context.CancelFunc) ui.Message {
+	return &appMessage{
+		appUI:  ui,
+		cancel: cancel,
+
+		title:      title,
+		dialogType: SN_DIALOG_APP,
+	}
+}
+
+func (ui *appUI) ShowErrorMessage(message string) {
+	uh := ui.NewUIMessage("Error").(*appMessage)
+	uh.WriteErrorMessage(message)
+	uh.showMessage(true)
+}
+
+func (ui *appUI) ShowInfoMessage(title, message string) {
+	uh := ui.NewUIMessage(title).(*appMessage)
+	uh.WriteInfoMessage(message)
+	uh.showMessage(true)
+}
+
+func (ui *appUI) ShowNoteMessage(title, message string) {
+	uh := ui.NewUIMessage(title).(*appMessage)
+	uh.WriteNoteMessage(message)
+	uh.showMessage(true)
+}
+
+func (ui *appUI) ShowNoticeMessage(title, message string) {
+	uh := ui.NewUIMessage(title).(*appMessage)
+	uh.WriteNoticeMessage(message)
+	uh.showMessage(true)
 }
 
 func (msg *appMessage) WriteMessage(message string) {
@@ -269,12 +349,90 @@ func (msg *appMessage) WriteText(text string) {
 	msg.msgBuffer.WriteString(text)
 }
 
-func (msg *appMessage) ShowMessage() {
+func (msg *appMessage) showMessage(dispatchToMain bool) {
 
+	msg.inputHandle = &dialogInputHandle{
+		input: make(chan *string, 1),
+	}
+
+	msg.dlgHandle = showDialog(
+		msg.appUI.dlgContext,
+		msg.dialogType, 
+		msg.title, 
+		msg.msgBuffer.String(),
+		SN_DIALOG_ACCESSORY_NONE,
+		EMPTY_STRING,
+		dispatchToMain,
+		msg.inputHandle,
+	)
+
+	go func() {
+		<-msg.inputHandle.input		
+		// clear dialog handle as it would have already been dismissed
+		msg.dlgHandle = nil
+	}()
+}
+
+func (msg *appMessage) ShowMessageWithInput(defaultInput string, handleInput func(*string)) {
+	msg.showMessageWithInput(SN_DIALOG_ACCESSORY_TEXT_INPUT, defaultInput, true, handleInput)	
+}
+
+func (msg *appMessage) ShowMessageWithSecureInput(handleInput func(*string)) {
+	msg.showMessageWithInput(SN_DIALOG_ACCESSORY_PASSWORD_INPUT, EMPTY_STRING, true, handleInput)	
+}
+
+func (msg *appMessage) ShowMessageWithSecureVerifiedInput(handleInput func(*string)) {
+	msg.showMessageWithInput(SN_DIALOG_ACCESSORY_PASSWORD_INPUT_WITH_VERIFY, EMPTY_STRING, true, handleInput)	
+}
+
+func (msg *appMessage) ShowMessageWithYesNoInput(handleInput func(bool)) {
+	msg.showMessageWithInput(SN_DIALOG_ACCESSORY_YES_NO, "", true, 
+		func(input *string) {
+			handleInput(input != nil)
+		},
+	)
+}
+
+func (msg *appMessage) ShowMessageWithFileInput(handleInput func(*string)) {
+	msg.showMessageWithInput(SN_DIALOG_ACCESSORY_FILE_OPEN, "", true, handleInput)	
+}
+
+func (msg *appMessage) showMessageWithInput(accType int, accessoryText string, dispatchToMain bool, handleInput func(*string)) {
+
+	msg.inputHandle = &dialogInputHandle{
+		input: make(chan *string, 1),
+	}
+
+	msg.dlgHandle = showDialog(
+		msg.appUI.dlgContext,
+		msg.dialogType, 
+		msg.title, 
+		msg.msgBuffer.String(),
+		accType,
+		accessoryText,
+		dispatchToMain,
+		msg.inputHandle,
+	)
+
+	go func() {
+		input := <-msg.inputHandle.input
+		if msg.cancel != nil {
+			msg.cancel()
+		}
+		handleInput(input)
+
+		// clear dialog handle as it would have already been dismissed
+		msg.dlgHandle = nil
+	}()
 }
 
 func (msg *appMessage) DismissMessage() {
-
+	if msg.cancel != nil {
+		msg.cancel()
+	}
+	if msg.dlgHandle != nil {
+		dismissDialog(msg.dlgHandle)
+	}
 }
 
 func (msg *appMessage) ShowMessageWithProgressIndicator(startMsg, progressMsg, endMsg string, doneAt int) ui.ProgressMessage {
@@ -295,6 +453,7 @@ func (msg *appMessage) ShowMessageWithProgressIndicator(startMsg, progressMsg, e
 		msg.msgBuffer.String(),
 		accType,
 		startMsg,
+		msg.appUI.dispatchToMain,
 		msg.inputHandle,
 	)
 
@@ -311,7 +470,9 @@ func (pi *appProgressIndicator) Start() {
 
 	go func() {
 		<-pi.msg.inputHandle.input
-		pi.msg.appUI.cancel()
+		if pi.msg.cancel != nil {
+			pi.msg.cancel()
+		}
 		// clear dialog handle as it would have already been dismissed
 		pi.msg.dlgHandle = nil
 	}()
@@ -366,7 +527,9 @@ func snTESTdialogNotifyAndInput(dlgContext uintptr) {
 		"This is an Alert", 
 		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.",
 		SN_DIALOG_ACCESSORY_OK_CANCEL,
-		"## Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nSed do eiusmod tempor **incididunt** ut labore et dolore [magna aliqua](https://www.google.com). Ut enim ad minim veniam, *quis nostrud exercitation ullamco laboris* nisi ut aliquip ex ea commodo consequat",inputHandle,
+		"## Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nSed do eiusmod tempor **incididunt** ut labore et dolore [magna aliqua](https://www.google.com). Ut enim ad minim veniam, *quis nostrud exercitation ullamco laboris* nisi ut aliquip ex ea commodo consequat",
+		false,
+		inputHandle,
 	)
 	
 	go func() {

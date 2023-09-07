@@ -10,6 +10,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "./common.h"
+
 typedef unsigned char SN_DIALOG_TYPE;
 extern const SN_DIALOG_TYPE SN_DIALOG_APP;
 extern const SN_DIALOG_TYPE SN_DIALOG_NOTIFY;
@@ -25,6 +27,7 @@ extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_OK_CANCEL;
 extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_TEXT_INPUT;
 extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_PASSWORD_INPUT;
 extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_PASSWORD_INPUT_WITH_VERIFY;
+extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_FILE_OPEN;
 extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_SPINNER;
 extern const SN_DIALOG_ACCESSORY_TYPE SN_DIALOG_ACCESSORY_PROGRESS_BAR;
 
@@ -35,6 +38,7 @@ typedef void *(*showDialog_fn_t)(
   const char *msg,
   const unsigned char accessoryType,
   const char *accessoryText,
+  const BOOL dispathToMain,
   unsigned long inputContext);
 typedef void (*dismissDialog_fn_t)(
   void *dlgContext,
@@ -42,11 +46,12 @@ typedef void (*dismissDialog_fn_t)(
 extern void snRegisterShowDialogFunc(void *dlgContext, showDialog_fn_t);
 extern void snSetDialogDismissHandler(void* dlgContext, dismissDialog_fn_t dismissHandler);
 extern void snUnregisterShowDialogFunc(void *dlgContext);
-extern void snHandleDialogInput(unsigned long inputContext, unsigned char ok, const char *result);
+extern void snHandleDialogInput(unsigned long inputContext, BOOL ok, const char *result);
+extern void snAssociateDialogInputToHandle(unsigned long inputContext, void *dlgHandle);
 
 typedef void (*getInput_result_fn_t)(
   unsigned long inputContext, 
-  unsigned char ok, 
+  BOOL ok, 
   const char *result);
 typedef void (*getInput_fn_t)(
   void *dlgContext, 
